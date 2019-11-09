@@ -1,0 +1,5 @@
+DJANGO_SETTINGS_MODULE=config.settings.prod
+SECRET_KEY=^2%sixf3^6+(%f(^sm9p9b@er82)!2kh$eb7n-w3a-%qm-%-t2
+DB_NAME=hasker
+DB_USER=hasker
+DB_PASSWORD=h@$keRApp1

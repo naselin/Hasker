@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Hasker Answer question
+{% endblock %}
+
+{% block body %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <h1>{{ question.title }}</h1>
+      </div>
+      <div class="col-1" align="center">
+        {% if user.is_authenticated %}
+          <p><a href="#" class="vote" data-vtype="question" data-id="{{ question.id }}" data-vote="up">
+            <span class="fa fa-2x fa-chevron-up"></span></a>
+          </p>
+        {% else %}
+          <p><i class="fa fa-2x fa-chevron-up"></i></p>
+        {% endif %}
+        <span class="fa fa-2x"><p class="votes-{{ question.id }}">{{ question.rating }}</p></span>
+        {% if user.is_authenticated %}
+          <p><a href="#" class="vote" data-vtype="question" data-id="{{ question.id }}" data-vote="down">
+            <span class="fa fa-2x fa-chevron-down"></span></a>
+          </p>
+        {% else %}
+          <p><i class="fa fa-2x fa-chevron-down"></i></p>
+        {% endif %}
+      </div>
+      <div class="col-11">
+        <p>{{ question.text }}</p>
+      </div>
+      <div class="col-8 offset-1">
+        {% for tag in question.tags.all %}
+          <a href="{% url 'tag' tag_text=tag %}" class="btn btn-primary" role="button">{{ tag }}</a>
+        {% endfor %}
+      </div>
+      <div class="col-2">
+        <img class="avatar-img" src="{{ MEDIA_URL }}{{ question.author.hasker_user.avatar }}" width="50", height="50">
+        {{ question.author | capfirst }}
+      </div>
+    </div>
+    <hr>
+    {% for answer in answers %}
+    <div class="row">
+      <div class="col-1" align="center">
+        {% if user.is_authenticated %}
+          <p><a href="#" class="vote" data-vtype="answer" data-id="{{ answer.id }}" data-vote="up">
+            <span class="fa fa-2x fa-chevron-up"></span></a>
+          </p>
+        {% else %}
+          <p><i class="fa fa-2x fa-chevron-up"></i></p>
+        {% endif %}
+        <span class="fa fa-2x"><p class="votes-{{ answer.id }}">{{ answer.rating }}</p></span>
+        {% if user.is_authenticated %}
+          <p><a href="#" class="vote" data-vtype="answer" data-id="{{ answer.id }}" data-vote="down">
+            <span class="fa fa-2x fa-chevron-down"></span></a>
+          </p>
+        {% else %}
+          <p><i class="fa fa-2x fa-chevron-down"></i></p>
+        {% endif %}
+                {% if question.correct_answer == answer %}
+          {% if user == question.author %}
+            <p><a href="#" class="mark" data-id="{{ answer.id }}"><span class="fa fa-2x fa-star"></span></a></p>
+          {% else %}
+            <p><i class="fa fa-2x fa-star"></i></p>
+          {% endif %}
+        {% else %}
+          {% if user == question.author %}
+            <p><a href="#" class="mark" data-id="{{ answer.id }}"><span class="fa fa-2x fa-check-square"></span></a></p>
+          {% endif %}  
+        {% endif %}
+      </div>
+      <div class="col-11">
+        <p>{{ answer.text }}</p>
+      </div>
+      <div class="col-2 offset-9">
+        <img class="avatar-img" src="{{ MEDIA_URL }}{{ answer.author.hasker_user.avatar }}" width="50", height="50">
+        {{ answer.author | capfirst }}
+      </div>
+    </div>
+    <hr>
+    {% endfor %}
+    {% if is_paginated %}
+      <ul class="pagination">
+       {% if page_obj.has_previous %}
+          <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;&nbsp;</a></li>
+        {% else %}
+          <li class="disabled"><span>&laquo;&nbsp;</span></li>
+        {% endif %}
+        {% for i in paginator.page_range %}
+          {% if page_obj.number == i %}
+            <li class="active"><span>{{ i }}&nbsp;<span class="sr-only">(current)</span></span></li>
+          {% else %}
+            <li><a href="?page={{ i }}">{{ i }}&nbsp;</a></li>
+          {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+          <li><a href="?page={{ page_obj.next_page_number }}">&nbsp;&raquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&nbsp;&raquo;</span></li>
+        {% endif %}
+      </ul>
+    {% endif %}
+    {% if user.is_authenticated %}
+    <div class="row">
+      <div class="col-9 offset-1">
+        <h4>Your answer</h4>
+        <form action="" method="post">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+              <div class="alert alert-danger" role="alert">
+                {% for error in form.non_field_errors %}
+                <p>{% if forloop.last %} class="mb-0"{% endif %}>{{ error }}</p>
+                {% endfor %}
+              </div>
+            {% endif %}
+            {% for field in form %}
+              <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+                {% for error in field.errors %}
+                <div>
+                  {{ error }}
+                </div>
+                {% endfor %}
+              </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-secondary">Submit</button>
+          </form>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+{% endblock %}
+
+  
