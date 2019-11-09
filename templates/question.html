@@ -18,7 +18,7 @@
         {% else %}
           <p><i class="fa fa-2x fa-chevron-up"></i></p>
         {% endif %}
-        <span class="fa fa-2x"><p class="votes-{{ question.id }}">{{ question.rating }}</p></span>
+        <span class="fa fa-2x"><p class="votes-question-{{ question.id }}">{{ question.rating }}</p></span>
         {% if user.is_authenticated %}
           <p><a href="#" class="vote" data-vtype="question" data-id="{{ question.id }}" data-vote="down">
             <span class="fa fa-2x fa-chevron-down"></span></a>
@@ -51,7 +51,7 @@
         {% else %}
           <p><i class="fa fa-2x fa-chevron-up"></i></p>
         {% endif %}
-        <span class="fa fa-2x"><p class="votes-{{ answer.id }}">{{ answer.rating }}</p></span>
+        <span class="fa fa-2x"><p class="votes-answer-{{ answer.id }}">{{ answer.rating }}</p></span>
         {% if user.is_authenticated %}
           <p><a href="#" class="vote" data-vtype="answer" data-id="{{ answer.id }}" data-vote="down">
             <span class="fa fa-2x fa-chevron-down"></span></a>

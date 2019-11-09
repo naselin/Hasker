@@ -28,7 +28,7 @@ $(document).ready(function () {
                 url: '/vote/' + vtype + '/' + id + '/',
                 success: function (data, status, xhr) {
                     var votes = data['rating'];
-                    var votes_tag = $('p.votes-' + id);
+                    var votes_tag = $('p.votes-' + vtype + '-' + id);
                     votes_tag.text(votes);
                 },
                 error: function (xhr, status, exception) {
