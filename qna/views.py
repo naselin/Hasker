@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import AnonymousUser
 from django.views import View
 from django.views.generic import CreateView, ListView
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.db.models import Q
@@ -94,6 +94,7 @@ class QuestionAnswersView(ListView):
 
 
 class TagView(ListView):
+    model = Question
     context_object_name = "questions"
     template_name = "tag.html"
     paginate_by = settings.QUESTIONS_PER_PAGE
@@ -108,9 +109,9 @@ class TagView(ListView):
         tag_text = self.kwargs.get("tag_text")
         tag = Tag.objects.filter(tag_text=tag_text).first()
         if not tag:
-            return Tag.objects.none()
-        queryset = Question.objects.filter(tags=tag)
-        return queryset.order_by("-rating", "-post_time")
+            return Question.objects.none()
+        queryset = super(TagView, self).get_queryset()
+        return queryset.filter(tags=tag).order_by("-rating", "-post_time")
 
 
 class SearchQuestionView(ListView):
@@ -134,9 +135,9 @@ class SearchQuestionView(ListView):
         return render(request, self.template_name, context=context)
 
     def get_queryset(self, search_text):
-        queryset = super(SearchQuestionView, self).get_queryset()
         if not search_text:
             return Question.objects.none()
+        queryset = super(SearchQuestionView, self).get_queryset()
         queryset = queryset.filter(Q(title__icontains=search_text) |
                                    Q(text__icontains=search_text))
         return queryset.order_by("-rating", "-post_time")
@@ -174,5 +175,8 @@ class MarkAnswerView(View):
         q = a.question
         if q.author != user:
             raise PermissionDenied("Question author required.")
-        q.mark_answer(a)
-        return redirect(reverse("question", kwargs={"slug": q.slug}))
+        try:
+            q.mark_answer(a)
+            return HttpResponse(status=200)
+        except:
+            return HttpResponse(status=500)

@@ -3,11 +3,14 @@ from __future__ import unicode_literals
 
 from django.db import models, transaction
 from django.utils.text import slugify
-from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
+from django.contrib.auth import get_user_model
+
+
+HaskerUser = get_user_model()
 
 
 class Tag(models.Model):
@@ -20,7 +23,8 @@ class Tag(models.Model):
 class Question(models.Model):
     title = models.CharField(max_length=200, blank=False, null=False)
     text = models.TextField(blank=False, null=False)
-    author = models.ForeignKey(User, related_name="questions")
+    author = models.ForeignKey(
+        HaskerUser, related_name="questions")
     post_time = models.DateTimeField(auto_now_add=True)
     tags = models.ManyToManyField(Tag, related_name="questions")
     slug = models.SlugField(max_length=200, unique=True)
@@ -34,6 +38,12 @@ class Question(models.Model):
         if author:
             self.author = author
             self.slug = slugify(self.title, allow_unicode=True)
+            # @TODO: Check it in form validation.
+            existent_slug = Question.objects.filter(slug=self.slug)
+            if existent_slug:
+                while existent_slug:
+                    self.slug = "%s-%s" % (self.slug, "1")
+                    existent_slug = Question.objects.filter(slug=self.slug)
         super(Question, self).save(*args, **kwargs)
         if tags:
             for word in tags:
@@ -59,7 +69,7 @@ class Question(models.Model):
         self.save()
 
     def send_email_notify(self, request, answer):
-        mailto = self.author.hasker_user.user.email
+        mailto = self.author.email
         subject = "User %s posted a new answer for your question '%s'." % (
             answer.author.username, self.title)
         message = "%s\nVisit <a href='%s'> and read it." % (
@@ -72,14 +82,21 @@ class Question(models.Model):
             fail_silently=True,
         )
 
+    def __unicode__(self):
+        return self.title
+
 
 class Answer(models.Model):
     question = models.ForeignKey(Question)
     text = models.TextField(blank=False, null=False)
-    author = models.ForeignKey(User, related_name="answers")
+    author = models.ForeignKey(
+        HaskerUser, related_name="answers")
     post_time = models.DateTimeField(auto_now_add=True)
     rating = models.IntegerField(default=0)
     votes = GenericRelation("Vote", related_query_name="answers")
+
+    def __unicode__(self):
+        return "%s - %s" % (self.question.title, self.text)
 
 
 class Vote(models.Model):
@@ -90,7 +107,7 @@ class Vote(models.Model):
         (DOWN_VOTE, "Down Vote"),
     )
 
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(HaskerUser)
     activity_type = models.CharField(max_length=1, choices=ACTIVITY_TYPES)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()

@@ -5,19 +5,24 @@ import json
 from datetime import timedelta
 
 from django.test import TestCase, RequestFactory
-from django.contrib.auth.models import User, AnonymousUser
+from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import reverse
 from django.utils import timezone
 from django.core.exceptions import PermissionDenied
+from django.contrib.auth import get_user_model
 
 from .models import Tag, Question, Answer, Vote
 from .views import QuestionVoteView, AnswerVoteView, MarkAnswerView
 
+HaskerUser = get_user_model()
+
 
 class ModelsTestCase(TestCase):
     def setUp(self):
-        self.user1 = User.objects.create(username="User1")
-        self.user2 = User.objects.create(username="User2")
+        self.user1 = HaskerUser.objects.create(
+            username="User1", email="user1@selin.com.ru")
+        self.user2 = HaskerUser.objects.create(
+            username="User2", email="user2@selin.com.ru")
         for tag in ("tag1", "tag2", "tag3"):
             Tag.objects.create(tag_text=tag)
 
@@ -106,7 +111,8 @@ class IndexViewTestCase(TestCase):
     }
 
     def setUp(self):
-        self.author = User.objects.create(username="User1")
+        self.author = HaskerUser.objects.create(
+            username="User1", email="user1@selin.com.ru")
         for k, v in self.questions.items():
             title = k
             text = v["text"]
@@ -151,8 +157,10 @@ class QuestionAnswersViewTestCase(TestCase):
     }
 
     def setUp(self):
-        self.user1 = User.objects.create(username="User1")
-        self.user2 = User.objects.create(username="User2")
+        self.user1 = HaskerUser.objects.create(
+            username="User1", email="user1@selin.com.ru")
+        self.user2 = HaskerUser.objects.create(
+            username="User2", email="user2@selin.com.ru")
         q = Question(title="Question", text="Test")
         q.save(author=self.user1)
         for k, v in self.answers.items():
@@ -188,7 +196,8 @@ class SearchViewTestCase(TestCase):
     }
 
     def setUp(self):
-        author = User.objects.create(username="User1")
+        author = HaskerUser.objects.create(
+            username="User1", email="user1@selin.com.ru")
         for k, v in self.questions.items():
             post_time = timezone.now() - timedelta(days=v["days_ago"])
             q = Question(title=k,
@@ -241,8 +250,10 @@ class SearchViewTestCase(TestCase):
 class VotesViewsTestCase(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
-        self.user1 = User.objects.create(username="User1")
-        self.user2 = User.objects.create(username="User2")
+        self.user1 = HaskerUser.objects.create(
+            username="User1", email="user1@selin.com.ru")
+        self.user2 = HaskerUser.objects.create(
+            username="User2", email="user2@selin.com.ru")
         self.q = Question(title="Question", text="Test")
         self.q.save(author=self.user1)
         self.a = Answer(question=self.q, text="Answer", author=self.user2)
