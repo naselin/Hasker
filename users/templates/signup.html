@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Sign Up to Hasker
+{% endblock %}
+
+{% block body %}
+  <div class="container-fluid">
+    <h4>Sign Up</h4>
+    <form enctype="multipart/form-data" action="" method="post">
+      {% include "user_form.html" %}
+    </form>
+  </div>
+{% endblock %}

@@ -1,76 +1,57 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import redirect, reverse, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.base import TemplateView
+from django.contrib.auth.views import LoginView
+from django.views.generic import CreateView, UpdateView
+from django.contrib.auth.models import AnonymousUser
+from django.core.exceptions import PermissionDenied
+from django.contrib.auth import get_user_model
 
-from .models import HaskerUser
-from .forms import SignUpForm, SettingsForm
+from .forms import LogInForm, SignUpForm, SettingsForm
 
 
-class SignUpView(TemplateView):
+HaskerUser = get_user_model()
+
+
+class LogInView(LoginView):
+    template_name = "login.html"
+    authentication_form = LogInForm
+    redirect_field_name = "next"
+
+    def get(self, *args, **kwargs):
+        if self.request.user != AnonymousUser():
+            raise PermissionDenied()
+        return super(LogInView, self).get(*args, **kwargs)
+
+
+class SignUpView(CreateView):
+    model = HaskerUser
     template_name = "signup.html"
-    form = SignUpForm
+    form_class = SignUpForm
 
-    def get_context_data(self, **kwargs):
-        context = super(TemplateView, self).get_context_data(**kwargs)
-        form = self.form()
-        context["form"] = form
-        return context
-
-    def post(self, request):
-        form = self.form(request.POST, request.FILES)
-        if form.is_valid():
-            # @TODO: Resize image, transaction
-            user = form.save()
-            hasker_user = HaskerUser(user=user)
-            hasker_user.avatar = form.cleaned_data.get("avatar")
-            if not hasker_user.avatar:
-                hasker_user.avatar = "avatars/default.png"
-            hasker_user.save()
-            password = form.cleaned_data.get("password1")
-            user = authenticate(username=user.username, password=password)
-            login(request, user)
-            return redirect(reverse("index"))
-        context = {
-            "form": form
-        }
-        return render(request, self.template_name, context)
+    def form_valid(self, form):
+        # @TODO: Resize image?
+        user = form.save()
+        username = form.cleaned_data.get("username")
+        password = form.cleaned_data.get("password1")
+        user = authenticate(username=username, password=password)
+        login(self.request, user)
+        return redirect(reverse("index"))
 
 
-class SettingsView(LoginRequiredMixin, TemplateView):
+class SettingsView(LoginRequiredMixin, UpdateView):
     login_url = "login"
     redirect_field_name = "next"
+    model = HaskerUser
     template_name = "settings.html"
-    form = SettingsForm
+    form_class = SettingsForm
 
-    def get_context_data(self, **kwargs):
-        context = super(TemplateView, self).get_context_data(**kwargs)
-        user = self.request.user
-        avatar = user.hasker_user.avatar
-        initial_values = {"avatar": avatar}
-        form = self.form(instance=user, initial=initial_values)
-        context["form"] = form
-        return context
+    def get_object(self):
+        return get_object_or_404(HaskerUser, pk=self.request.user.id)
 
-    def post(self, request, *args, **kwargs):
-        form = self.form(request.POST, request.FILES, instance=request.user)
-        if form.is_valid():
-            user = form.save()
-            profile = user.hasker_user
-            clear_avatar = request.POST.get("avatar-clear", False)
-            if request.FILES:
-                profile.avatar = form.cleaned_data.get("avatar")
-                profile.save()
-            elif clear_avatar:
-                profile.avatar = "avatars/default.png"
-                profile.save()
-            return redirect(reverse("settings"))
-        avatar = request.user.hasker_user.avatar
-        context = {
-            "form": form,
-            "avatar": avatar
-        }
-        return render(request, self.template_name, context)
+    def form_valid(self, form):
+        form.save()
+        return redirect(reverse("settings"))
