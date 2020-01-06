@@ -176,119 +176,6 @@ ALTER SEQUENCE public.auth_permission_id_seq OWNED BY public.auth_permission.id;
 
 
 --
--- Name: auth_user; Type: TABLE; Schema: public; Owner: hasker
---
-
-CREATE TABLE public.auth_user (
-    id integer NOT NULL,
-    password character varying(128) NOT NULL,
-    last_login timestamp with time zone,
-    is_superuser boolean NOT NULL,
-    username character varying(150) NOT NULL,
-    first_name character varying(30) NOT NULL,
-    last_name character varying(30) NOT NULL,
-    email character varying(254) NOT NULL,
-    is_staff boolean NOT NULL,
-    is_active boolean NOT NULL,
-    date_joined timestamp with time zone NOT NULL
-);
-
-
-ALTER TABLE public.auth_user OWNER TO hasker;
-
---
--- Name: auth_user_groups; Type: TABLE; Schema: public; Owner: hasker
---
-
-CREATE TABLE public.auth_user_groups (
-    id integer NOT NULL,
-    user_id integer NOT NULL,
-    group_id integer NOT NULL
-);
-
-
-ALTER TABLE public.auth_user_groups OWNER TO hasker;
-
---
--- Name: auth_user_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: hasker
---
-
-CREATE SEQUENCE public.auth_user_groups_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.auth_user_groups_id_seq OWNER TO hasker;
-
---
--- Name: auth_user_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: hasker
---
-
-ALTER SEQUENCE public.auth_user_groups_id_seq OWNED BY public.auth_user_groups.id;
-
-
---
--- Name: auth_user_id_seq; Type: SEQUENCE; Schema: public; Owner: hasker
---
-
-CREATE SEQUENCE public.auth_user_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.auth_user_id_seq OWNER TO hasker;
-
---
--- Name: auth_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: hasker
---
-
-ALTER SEQUENCE public.auth_user_id_seq OWNED BY public.auth_user.id;
-
-
---
--- Name: auth_user_user_permissions; Type: TABLE; Schema: public; Owner: hasker
---
-
-CREATE TABLE public.auth_user_user_permissions (
-    id integer NOT NULL,
-    user_id integer NOT NULL,
-    permission_id integer NOT NULL
-);
-
-
-ALTER TABLE public.auth_user_user_permissions OWNER TO hasker;
-
---
--- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: hasker
---
-
-CREATE SEQUENCE public.auth_user_user_permissions_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.auth_user_user_permissions_id_seq OWNER TO hasker;
-
---
--- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: hasker
---
-
-ALTER SEQUENCE public.auth_user_user_permissions_id_seq OWNED BY public.auth_user_user_permissions.id;
-
-
---
 -- Name: django_admin_log; Type: TABLE; Schema: public; Owner: hasker
 --
 
@@ -606,12 +493,56 @@ ALTER SEQUENCE public.qna_vote_id_seq OWNED BY public.qna_vote.id;
 
 CREATE TABLE public.users_haskeruser (
     id integer NOT NULL,
-    avatar character varying(100),
-    user_id integer NOT NULL
+    password character varying(128) NOT NULL,
+    last_login timestamp with time zone,
+    is_superuser boolean NOT NULL,
+    username character varying(150) NOT NULL,
+    first_name character varying(30) NOT NULL,
+    last_name character varying(30) NOT NULL,
+    is_staff boolean NOT NULL,
+    is_active boolean NOT NULL,
+    date_joined timestamp with time zone NOT NULL,
+    email character varying(254) NOT NULL,
+    avatar character varying(100)
 );
 
 
 ALTER TABLE public.users_haskeruser OWNER TO hasker;
+
+--
+-- Name: users_haskeruser_groups; Type: TABLE; Schema: public; Owner: hasker
+--
+
+CREATE TABLE public.users_haskeruser_groups (
+    id integer NOT NULL,
+    haskeruser_id integer NOT NULL,
+    group_id integer NOT NULL
+);
+
+
+ALTER TABLE public.users_haskeruser_groups OWNER TO hasker;
+
+--
+-- Name: users_haskeruser_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: hasker
+--
+
+CREATE SEQUENCE public.users_haskeruser_groups_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_haskeruser_groups_id_seq OWNER TO hasker;
+
+--
+-- Name: users_haskeruser_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: hasker
+--
+
+ALTER SEQUENCE public.users_haskeruser_groups_id_seq OWNED BY public.users_haskeruser_groups.id;
+
 
 --
 -- Name: users_haskeruser_id_seq; Type: SEQUENCE; Schema: public; Owner: hasker
@@ -636,6 +567,41 @@ ALTER SEQUENCE public.users_haskeruser_id_seq OWNED BY public.users_haskeruser.i
 
 
 --
+-- Name: users_haskeruser_user_permissions; Type: TABLE; Schema: public; Owner: hasker
+--
+
+CREATE TABLE public.users_haskeruser_user_permissions (
+    id integer NOT NULL,
+    haskeruser_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE public.users_haskeruser_user_permissions OWNER TO hasker;
+
+--
+-- Name: users_haskeruser_user_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: hasker
+--
+
+CREATE SEQUENCE public.users_haskeruser_user_permissions_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_haskeruser_user_permissions_id_seq OWNER TO hasker;
+
+--
+-- Name: users_haskeruser_user_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: hasker
+--
+
+ALTER SEQUENCE public.users_haskeruser_user_permissions_id_seq OWNED BY public.users_haskeruser_user_permissions.id;
+
+
+--
 -- Name: auth_group id; Type: DEFAULT; Schema: public; Owner: hasker
 --
 
@@ -654,27 +620,6 @@ ALTER TABLE ONLY public.auth_group_permissions ALTER COLUMN id SET DEFAULT nextv
 --
 
 ALTER TABLE ONLY public.auth_permission ALTER COLUMN id SET DEFAULT nextval('public.auth_permission_id_seq'::regclass);
-
-
---
--- Name: auth_user id; Type: DEFAULT; Schema: public; Owner: hasker
---
-
-ALTER TABLE ONLY public.auth_user ALTER COLUMN id SET DEFAULT nextval('public.auth_user_id_seq'::regclass);
-
-
---
--- Name: auth_user_groups id; Type: DEFAULT; Schema: public; Owner: hasker
---
-
-ALTER TABLE ONLY public.auth_user_groups ALTER COLUMN id SET DEFAULT nextval('public.auth_user_groups_id_seq'::regclass);
-
-
---
--- Name: auth_user_user_permissions id; Type: DEFAULT; Schema: public; Owner: hasker
---
-
-ALTER TABLE ONLY public.auth_user_user_permissions ALTER COLUMN id SET DEFAULT nextval('public.auth_user_user_permissions_id_seq'::regclass);
 
 
 --
@@ -741,6 +686,20 @@ ALTER TABLE ONLY public.users_haskeruser ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
+-- Name: users_haskeruser_groups id; Type: DEFAULT; Schema: public; Owner: hasker
+--
+
+ALTER TABLE ONLY public.users_haskeruser_groups ALTER COLUMN id SET DEFAULT nextval('public.users_haskeruser_groups_id_seq'::regclass);
+
+
+--
+-- Name: users_haskeruser_user_permissions id; Type: DEFAULT; Schema: public; Owner: hasker
+--
+
+ALTER TABLE ONLY public.users_haskeruser_user_permissions ALTER COLUMN id SET DEFAULT nextval('public.users_haskeruser_user_permissions_id_seq'::regclass);
+
+
+--
 -- Data for Name: auth_group; Type: TABLE DATA; Schema: public; Owner: hasker
 --
 
@@ -761,66 +720,36 @@ COPY public.auth_group_permissions (id, group_id, permission_id) FROM stdin;
 --
 
 COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
-1	Can add vote	1	add_vote
-2	Can change vote	1	change_vote
-3	Can delete vote	1	delete_vote
-4	Can add question	2	add_question
-5	Can change question	2	change_question
-6	Can delete question	2	delete_question
-7	Can add answer	3	add_answer
-8	Can change answer	3	change_answer
-9	Can delete answer	3	delete_answer
-10	Can add tag	4	add_tag
-11	Can change tag	4	change_tag
-12	Can delete tag	4	delete_tag
-13	Can add hasker user	5	add_haskeruser
-14	Can change hasker user	5	change_haskeruser
-15	Can delete hasker user	5	delete_haskeruser
-16	Can add log entry	6	add_logentry
-17	Can change log entry	6	change_logentry
-18	Can delete log entry	6	delete_logentry
-19	Can add group	7	add_group
-20	Can change group	7	change_group
-21	Can delete group	7	delete_group
-22	Can add permission	8	add_permission
-23	Can change permission	8	change_permission
-24	Can delete permission	8	delete_permission
-25	Can add user	9	add_user
-26	Can change user	9	change_user
-27	Can delete user	9	delete_user
-28	Can add content type	10	add_contenttype
-29	Can change content type	10	change_contenttype
-30	Can delete content type	10	delete_contenttype
-31	Can add session	11	add_session
-32	Can change session	11	change_session
-33	Can delete session	11	delete_session
-\.
-
-
---
--- Data for Name: auth_user; Type: TABLE DATA; Schema: public; Owner: hasker
---
-
-COPY public.auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
-3	pbkdf2_sha256$36000$jKdB8kIcqKER$8NBihIhKOInya07sKvDyJVc79ZE+a7BbnP/Pf6Q4CvE=	2019-11-06 14:43:26.766556+00	f	Fry			fry@selin.com.ru	f	t	2019-11-06 14:43:26.684515+00
-2	pbkdf2_sha256$36000$i2SzGQtckCJU$MtH+v4pNV6CqSpDg4sajlj3a1l6gSC7NQCuVua+ju9g=	2019-11-06 14:48:49.58125+00	f	Leela			leela@selin.com.ru	f	t	2019-11-06 14:42:53.66989+00
-1	pbkdf2_sha256$36000$HDSQENSKEjkt$F9Qr5Cy0+F9T3rCEerCAoYr1iLRwQafnd1xhS1yip50=	2019-11-06 14:49:27.148722+00	f	Hermes			hermes@selin.com.ru	f	t	2019-11-06 14:42:21.371676+00
-\.
-
-
---
--- Data for Name: auth_user_groups; Type: TABLE DATA; Schema: public; Owner: hasker
---
-
-COPY public.auth_user_groups (id, user_id, group_id) FROM stdin;
-\.
-
-
---
--- Data for Name: auth_user_user_permissions; Type: TABLE DATA; Schema: public; Owner: hasker
---
-
-COPY public.auth_user_user_permissions (id, user_id, permission_id) FROM stdin;
+1	Can add log entry	1	add_logentry
+2	Can change log entry	1	change_logentry
+3	Can delete log entry	1	delete_logentry
+4	Can add group	2	add_group
+5	Can change group	2	change_group
+6	Can delete group	2	delete_group
+7	Can add permission	3	add_permission
+8	Can change permission	3	change_permission
+9	Can delete permission	3	delete_permission
+10	Can add content type	4	add_contenttype
+11	Can change content type	4	change_contenttype
+12	Can delete content type	4	delete_contenttype
+13	Can add session	5	add_session
+14	Can change session	5	change_session
+15	Can delete session	5	delete_session
+16	Can add vote	6	add_vote
+17	Can change vote	6	change_vote
+18	Can delete vote	6	delete_vote
+19	Can add question	7	add_question
+20	Can change question	7	change_question
+21	Can delete question	7	delete_question
+22	Can add answer	8	add_answer
+23	Can change answer	8	change_answer
+24	Can delete answer	8	delete_answer
+25	Can add tag	9	add_tag
+26	Can change tag	9	change_tag
+27	Can delete tag	9	delete_tag
+28	Can add user	10	add_haskeruser
+29	Can change user	10	change_haskeruser
+30	Can delete user	10	delete_haskeruser
 \.
 
 
@@ -837,17 +766,16 @@ COPY public.django_admin_log (id, action_time, object_id, object_repr, action_fl
 --
 
 COPY public.django_content_type (id, app_label, model) FROM stdin;
-1	qna	vote
-2	qna	question
-3	qna	answer
-4	qna	tag
-5	users	haskeruser
-6	admin	logentry
-7	auth	group
-8	auth	permission
-9	auth	user
-10	contenttypes	contenttype
-11	sessions	session
+1	admin	logentry
+2	auth	group
+3	auth	permission
+4	contenttypes	contenttype
+5	sessions	session
+6	qna	vote
+7	qna	question
+8	qna	answer
+9	qna	tag
+10	users	haskeruser
 \.
 
 
@@ -856,21 +784,22 @@ COPY public.django_content_type (id, app_label, model) FROM stdin;
 --
 
 COPY public.django_migrations (id, app, name, applied) FROM stdin;
-1	contenttypes	0001_initial	2019-11-06 11:54:41.58709+00
-2	auth	0001_initial	2019-11-06 11:54:41.671764+00
-3	admin	0001_initial	2019-11-06 11:54:41.700631+00
-4	admin	0002_logentry_remove_auto_add	2019-11-06 11:54:41.719192+00
-5	contenttypes	0002_remove_content_type_name	2019-11-06 11:54:41.752202+00
-6	auth	0002_alter_permission_name_max_length	2019-11-06 11:54:41.763261+00
-7	auth	0003_alter_user_email_max_length	2019-11-06 11:54:41.781738+00
-8	auth	0004_alter_user_username_opts	2019-11-06 11:54:41.796841+00
-9	auth	0005_alter_user_last_login_null	2019-11-06 11:54:41.812003+00
-10	auth	0006_require_contenttypes_0002	2019-11-06 11:54:41.814292+00
-11	auth	0007_alter_validators_add_error_messages	2019-11-06 11:54:41.831997+00
-12	auth	0008_alter_user_username_max_length	2019-11-06 11:54:41.876142+00
-13	qna	0001_initial	2019-11-06 11:54:42.014763+00
-14	sessions	0001_initial	2019-11-06 11:54:42.030338+00
-15	users	0001_initial	2019-11-06 11:54:42.057415+00
+1	contenttypes	0001_initial	2020-01-06 14:55:09.777083+00
+2	contenttypes	0002_remove_content_type_name	2020-01-06 14:55:09.793694+00
+3	auth	0001_initial	2020-01-06 14:55:09.84938+00
+4	auth	0002_alter_permission_name_max_length	2020-01-06 14:55:09.859906+00
+5	auth	0003_alter_user_email_max_length	2020-01-06 14:55:09.870532+00
+6	auth	0004_alter_user_username_opts	2020-01-06 14:55:09.882524+00
+7	auth	0005_alter_user_last_login_null	2020-01-06 14:55:09.892577+00
+8	auth	0006_require_contenttypes_0002	2020-01-06 14:55:09.896063+00
+9	auth	0007_alter_validators_add_error_messages	2020-01-06 14:55:09.907093+00
+10	auth	0008_alter_user_username_max_length	2020-01-06 14:55:09.920863+00
+11	users	0001_initial	2020-01-06 14:55:09.97163+00
+12	admin	0001_initial	2020-01-06 14:55:10.003933+00
+13	admin	0002_logentry_remove_auto_add	2020-01-06 14:55:10.02464+00
+14	qna	0001_initial	2020-01-06 14:55:10.108331+00
+15	qna	0002_auto_20200106_1447	2020-01-06 14:55:10.243409+00
+16	sessions	0001_initial	2020-01-06 14:55:10.264623+00
 \.
 
 
@@ -879,6 +808,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 --
 
 COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
+yz2ab0xulot8n915arqz2b9lmthixti6	YjFkYmUzYTQ2YjNjMDdiM2YzMzliMzM3NTdiNGJhODVhNTc0YTMwZjp7Il9hdXRoX3VzZXJfaGFzaCI6IjRkZmVjMzcyMTdlMjhjNTNkOTJkMGJhZDVkYmY2Y2MyNjNjZWI4NTYiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIyIn0=	2020-01-20 15:00:38.81867+00
 \.
 
 
@@ -887,8 +817,8 @@ COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
 --
 
 COPY public.qna_answer (id, text, post_time, rating, author_id, question_id) FROM stdin;
-1	Answer #1	2019-11-06 14:48:38.907171+00	0	1	2
-2	Ответ #2	2019-11-06 14:49:14.630925+00	0	2	2
+1	Test 2	2020-01-06 14:59:58.879782+00	0	3	1
+2	Test 2	2020-01-06 15:01:11.833985+00	0	2	1
 \.
 
 
@@ -897,9 +827,9 @@ COPY public.qna_answer (id, text, post_time, rating, author_id, question_id) FRO
 --
 
 COPY public.qna_question (id, title, text, post_time, slug, num_answers, rating, author_id, correct_answer_id) FROM stdin;
-1	Test #1	Test question #1.	2019-11-06 14:47:19.293025+00	test-1	0	1	1	\N
-3	Test #3	New test question #3	2019-11-06 14:48:06.136928+00	test-3	0	-1	1	\N
-2	Test #2	Question #2	2019-11-06 14:47:41.492842+00	test-2	2	1	1	2
+3	Test #3	Test #2	2020-01-06 15:00:55.288464+00	test-3	0	0	2	\N
+2	Test #2	Test #2	2020-01-06 15:00:25.274765+00	test-2	0	-1	1	\N
+1	Test#1	Just a test #1	2020-01-06 14:59:50.867051+00	test1	2	2	3	\N
 \.
 
 
@@ -932,9 +862,9 @@ COPY public.qna_tag (id, tag_text) FROM stdin;
 --
 
 COPY public.qna_vote (id, activity_type, object_id, content_type_id, user_id) FROM stdin;
-1	U	1	2	1
-2	U	2	2	1
-3	D	3	2	1
+1	U	1	7	3
+2	U	1	7	1
+3	D	2	7	2
 \.
 
 
@@ -942,10 +872,26 @@ COPY public.qna_vote (id, activity_type, object_id, content_type_id, user_id) FR
 -- Data for Name: users_haskeruser; Type: TABLE DATA; Schema: public; Owner: hasker
 --
 
-COPY public.users_haskeruser (id, avatar, user_id) FROM stdin;
-1	avatars/Hermes_Hermes..jpg	1
-2	avatars/Leela_Leela..jpeg	2
-3	avatars/default.png	3
+COPY public.users_haskeruser (id, password, last_login, is_superuser, username, first_name, last_name, is_staff, is_active, date_joined, email, avatar) FROM stdin;
+3	pbkdf2_sha256$36000$qfbzask22XuI$0dJNX+0hSQCI8RmgzMW+rSCl3i/0tNC3VJugHpCRUqs=	2020-01-06 14:59:32.49124+00	f	Fry			f	t	2020-01-06 14:59:32.406859+00	fry@selin.com.ru	
+1	pbkdf2_sha256$36000$aNALE5PeTmbS$EMJBXmqWGJCUmlcxd88gZJdbsysjgk3M2SRJjce+8dU=	2020-01-06 15:00:08.271784+00	f	Hermes			f	t	2020-01-06 14:58:53.109595+00	hermes@selin.com.ru	avatars/Hermes_Hermes.jpg
+2	pbkdf2_sha256$36000$ke20gEJgqSX7$2/l3/9f0UvOcK1KcN0awrIkbJn0LvtDfc4ALWvoLHMg=	2020-01-06 15:00:38.816151+00	f	Leela			f	t	2020-01-06 14:59:15.183387+00	leela@selin.com.ru	avatars/Leela_Leela.jpeg
+\.
+
+
+--
+-- Data for Name: users_haskeruser_groups; Type: TABLE DATA; Schema: public; Owner: hasker
+--
+
+COPY public.users_haskeruser_groups (id, haskeruser_id, group_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: users_haskeruser_user_permissions; Type: TABLE DATA; Schema: public; Owner: hasker
+--
+
+COPY public.users_haskeruser_user_permissions (id, haskeruser_id, permission_id) FROM stdin;
 \.
 
 
@@ -967,28 +913,7 @@ SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
 -- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: hasker
 --
 
-SELECT pg_catalog.setval('public.auth_permission_id_seq', 33, true);
-
-
---
--- Name: auth_user_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: hasker
---
-
-SELECT pg_catalog.setval('public.auth_user_groups_id_seq', 1, false);
-
-
---
--- Name: auth_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: hasker
---
-
-SELECT pg_catalog.setval('public.auth_user_id_seq', 3, true);
-
-
---
--- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: hasker
---
-
-SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 30, true);
 
 
 --
@@ -1002,14 +927,14 @@ SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, false);
 -- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: hasker
 --
 
-SELECT pg_catalog.setval('public.django_content_type_id_seq', 11, true);
+SELECT pg_catalog.setval('public.django_content_type_id_seq', 10, true);
 
 
 --
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: hasker
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 15, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 16, true);
 
 
 --
@@ -1048,10 +973,24 @@ SELECT pg_catalog.setval('public.qna_vote_id_seq', 3, true);
 
 
 --
+-- Name: users_haskeruser_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: hasker
+--
+
+SELECT pg_catalog.setval('public.users_haskeruser_groups_id_seq', 1, false);
+
+
+--
 -- Name: users_haskeruser_id_seq; Type: SEQUENCE SET; Schema: public; Owner: hasker
 --
 
 SELECT pg_catalog.setval('public.users_haskeruser_id_seq', 3, true);
+
+
+--
+-- Name: users_haskeruser_user_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: hasker
+--
+
+SELECT pg_catalog.setval('public.users_haskeruser_user_permissions_id_seq', 1, false);
 
 
 --
@@ -1100,54 +1039,6 @@ ALTER TABLE ONLY public.auth_permission
 
 ALTER TABLE ONLY public.auth_permission
     ADD CONSTRAINT auth_permission_pkey PRIMARY KEY (id);
-
-
---
--- Name: auth_user_groups auth_user_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: hasker
---
-
-ALTER TABLE ONLY public.auth_user_groups
-    ADD CONSTRAINT auth_user_groups_pkey PRIMARY KEY (id);
-
-
---
--- Name: auth_user_groups auth_user_groups_user_id_group_id_94350c0c_uniq; Type: CONSTRAINT; Schema: public; Owner: hasker
---
-
-ALTER TABLE ONLY public.auth_user_groups
-    ADD CONSTRAINT auth_user_groups_user_id_group_id_94350c0c_uniq UNIQUE (user_id, group_id);
-
-
---
--- Name: auth_user auth_user_pkey; Type: CONSTRAINT; Schema: public; Owner: hasker
---
-
-ALTER TABLE ONLY public.auth_user
-    ADD CONSTRAINT auth_user_pkey PRIMARY KEY (id);
-
-
---
--- Name: auth_user_user_permissions auth_user_user_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: hasker
---
-
-ALTER TABLE ONLY public.auth_user_user_permissions
-    ADD CONSTRAINT auth_user_user_permissions_pkey PRIMARY KEY (id);
-
-
---
--- Name: auth_user_user_permissions auth_user_user_permissions_user_id_permission_id_14a6b632_uniq; Type: CONSTRAINT; Schema: public; Owner: hasker
---
-
-ALTER TABLE ONLY public.auth_user_user_permissions
-    ADD CONSTRAINT auth_user_user_permissions_user_id_permission_id_14a6b632_uniq UNIQUE (user_id, permission_id);
-
-
---
--- Name: auth_user auth_user_username_key; Type: CONSTRAINT; Schema: public; Owner: hasker
---
-
-ALTER TABLE ONLY public.auth_user
-    ADD CONSTRAINT auth_user_username_key UNIQUE (username);
 
 
 --
@@ -1255,6 +1146,30 @@ ALTER TABLE ONLY public.qna_vote
 
 
 --
+-- Name: users_haskeruser users_haskeruser_email_key; Type: CONSTRAINT; Schema: public; Owner: hasker
+--
+
+ALTER TABLE ONLY public.users_haskeruser
+    ADD CONSTRAINT users_haskeruser_email_key UNIQUE (email);
+
+
+--
+-- Name: users_haskeruser_groups users_haskeruser_groups_haskeruser_id_group_id_660bf7dc_uniq; Type: CONSTRAINT; Schema: public; Owner: hasker
+--
+
+ALTER TABLE ONLY public.users_haskeruser_groups
+    ADD CONSTRAINT users_haskeruser_groups_haskeruser_id_group_id_660bf7dc_uniq UNIQUE (haskeruser_id, group_id);
+
+
+--
+-- Name: users_haskeruser_groups users_haskeruser_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: hasker
+--
+
+ALTER TABLE ONLY public.users_haskeruser_groups
+    ADD CONSTRAINT users_haskeruser_groups_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: users_haskeruser users_haskeruser_pkey; Type: CONSTRAINT; Schema: public; Owner: hasker
 --
 
@@ -1263,11 +1178,27 @@ ALTER TABLE ONLY public.users_haskeruser
 
 
 --
--- Name: users_haskeruser users_haskeruser_user_id_key; Type: CONSTRAINT; Schema: public; Owner: hasker
+-- Name: users_haskeruser_user_permissions users_haskeruser_user_pe_haskeruser_id_permission_43593b16_uniq; Type: CONSTRAINT; Schema: public; Owner: hasker
+--
+
+ALTER TABLE ONLY public.users_haskeruser_user_permissions
+    ADD CONSTRAINT users_haskeruser_user_pe_haskeruser_id_permission_43593b16_uniq UNIQUE (haskeruser_id, permission_id);
+
+
+--
+-- Name: users_haskeruser_user_permissions users_haskeruser_user_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: hasker
+--
+
+ALTER TABLE ONLY public.users_haskeruser_user_permissions
+    ADD CONSTRAINT users_haskeruser_user_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users_haskeruser users_haskeruser_username_key; Type: CONSTRAINT; Schema: public; Owner: hasker
 --
 
 ALTER TABLE ONLY public.users_haskeruser
-    ADD CONSTRAINT users_haskeruser_user_id_key UNIQUE (user_id);
+    ADD CONSTRAINT users_haskeruser_username_key UNIQUE (username);
 
 
 --
@@ -1296,41 +1227,6 @@ CREATE INDEX auth_group_permissions_permission_id_84c5c92e ON public.auth_group_
 --
 
 CREATE INDEX auth_permission_content_type_id_2f476e4b ON public.auth_permission USING btree (content_type_id);
-
-
---
--- Name: auth_user_groups_group_id_97559544; Type: INDEX; Schema: public; Owner: hasker
---
-
-CREATE INDEX auth_user_groups_group_id_97559544 ON public.auth_user_groups USING btree (group_id);
-
-
---
--- Name: auth_user_groups_user_id_6a12ed8b; Type: INDEX; Schema: public; Owner: hasker
---
-
-CREATE INDEX auth_user_groups_user_id_6a12ed8b ON public.auth_user_groups USING btree (user_id);
-
-
---
--- Name: auth_user_user_permissions_permission_id_1fbb5f2c; Type: INDEX; Schema: public; Owner: hasker
---
-
-CREATE INDEX auth_user_user_permissions_permission_id_1fbb5f2c ON public.auth_user_user_permissions USING btree (permission_id);
-
-
---
--- Name: auth_user_user_permissions_user_id_a95ead1b; Type: INDEX; Schema: public; Owner: hasker
---
-
-CREATE INDEX auth_user_user_permissions_user_id_a95ead1b ON public.auth_user_user_permissions USING btree (user_id);
-
-
---
--- Name: auth_user_username_6821ab7c_like; Type: INDEX; Schema: public; Owner: hasker
---
-
-CREATE INDEX auth_user_username_6821ab7c_like ON public.auth_user USING btree (username varchar_pattern_ops);
 
 
 --
@@ -1418,6 +1314,48 @@ CREATE INDEX qna_vote_user_id_7effef33 ON public.qna_vote USING btree (user_id);
 
 
 --
+-- Name: users_haskeruser_email_3f2e6908_like; Type: INDEX; Schema: public; Owner: hasker
+--
+
+CREATE INDEX users_haskeruser_email_3f2e6908_like ON public.users_haskeruser USING btree (email varchar_pattern_ops);
+
+
+--
+-- Name: users_haskeruser_groups_group_id_30235a32; Type: INDEX; Schema: public; Owner: hasker
+--
+
+CREATE INDEX users_haskeruser_groups_group_id_30235a32 ON public.users_haskeruser_groups USING btree (group_id);
+
+
+--
+-- Name: users_haskeruser_groups_haskeruser_id_469cd050; Type: INDEX; Schema: public; Owner: hasker
+--
+
+CREATE INDEX users_haskeruser_groups_haskeruser_id_469cd050 ON public.users_haskeruser_groups USING btree (haskeruser_id);
+
+
+--
+-- Name: users_haskeruser_user_permissions_haskeruser_id_8024d1ad; Type: INDEX; Schema: public; Owner: hasker
+--
+
+CREATE INDEX users_haskeruser_user_permissions_haskeruser_id_8024d1ad ON public.users_haskeruser_user_permissions USING btree (haskeruser_id);
+
+
+--
+-- Name: users_haskeruser_user_permissions_permission_id_078f2630; Type: INDEX; Schema: public; Owner: hasker
+--
+
+CREATE INDEX users_haskeruser_user_permissions_permission_id_078f2630 ON public.users_haskeruser_user_permissions USING btree (permission_id);
+
+
+--
+-- Name: users_haskeruser_username_c001f7ef_like; Type: INDEX; Schema: public; Owner: hasker
+--
+
+CREATE INDEX users_haskeruser_username_c001f7ef_like ON public.users_haskeruser USING btree (username varchar_pattern_ops);
+
+
+--
 -- Name: auth_group_permissions auth_group_permissio_permission_id_84c5c92e_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: hasker
 --
 
@@ -1442,38 +1380,6 @@ ALTER TABLE ONLY public.auth_permission
 
 
 --
--- Name: auth_user_groups auth_user_groups_group_id_97559544_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: hasker
---
-
-ALTER TABLE ONLY public.auth_user_groups
-    ADD CONSTRAINT auth_user_groups_group_id_97559544_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES public.auth_group(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: auth_user_groups auth_user_groups_user_id_6a12ed8b_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: hasker
---
-
-ALTER TABLE ONLY public.auth_user_groups
-    ADD CONSTRAINT auth_user_groups_user_id_6a12ed8b_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: auth_user_user_permissions auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: hasker
---
-
-ALTER TABLE ONLY public.auth_user_user_permissions
-    ADD CONSTRAINT auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm FOREIGN KEY (permission_id) REFERENCES public.auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: auth_user_user_permissions auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: hasker
---
-
-ALTER TABLE ONLY public.auth_user_user_permissions
-    ADD CONSTRAINT auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
 -- Name: django_admin_log django_admin_log_content_type_id_c4bce8eb_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: hasker
 --
 
@@ -1482,19 +1388,19 @@ ALTER TABLE ONLY public.django_admin_log
 
 
 --
--- Name: django_admin_log django_admin_log_user_id_c564eba6_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: hasker
+-- Name: django_admin_log django_admin_log_user_id_c564eba6_fk_users_haskeruser_id; Type: FK CONSTRAINT; Schema: public; Owner: hasker
 --
 
 ALTER TABLE ONLY public.django_admin_log
-    ADD CONSTRAINT django_admin_log_user_id_c564eba6_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+    ADD CONSTRAINT django_admin_log_user_id_c564eba6_fk_users_haskeruser_id FOREIGN KEY (user_id) REFERENCES public.users_haskeruser(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
--- Name: qna_answer qna_answer_author_id_4f6db6b5_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: hasker
+-- Name: qna_answer qna_answer_author_id_4f6db6b5_fk_users_haskeruser_id; Type: FK CONSTRAINT; Schema: public; Owner: hasker
 --
 
 ALTER TABLE ONLY public.qna_answer
-    ADD CONSTRAINT qna_answer_author_id_4f6db6b5_fk_auth_user_id FOREIGN KEY (author_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+    ADD CONSTRAINT qna_answer_author_id_4f6db6b5_fk_users_haskeruser_id FOREIGN KEY (author_id) REFERENCES public.users_haskeruser(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -1506,11 +1412,11 @@ ALTER TABLE ONLY public.qna_answer
 
 
 --
--- Name: qna_question qna_question_author_id_af82ee61_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: hasker
+-- Name: qna_question qna_question_author_id_af82ee61_fk_users_haskeruser_id; Type: FK CONSTRAINT; Schema: public; Owner: hasker
 --
 
 ALTER TABLE ONLY public.qna_question
-    ADD CONSTRAINT qna_question_author_id_af82ee61_fk_auth_user_id FOREIGN KEY (author_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+    ADD CONSTRAINT qna_question_author_id_af82ee61_fk_users_haskeruser_id FOREIGN KEY (author_id) REFERENCES public.users_haskeruser(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -1546,19 +1452,43 @@ ALTER TABLE ONLY public.qna_vote
 
 
 --
--- Name: qna_vote qna_vote_user_id_7effef33_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: hasker
+-- Name: qna_vote qna_vote_user_id_7effef33_fk_users_haskeruser_id; Type: FK CONSTRAINT; Schema: public; Owner: hasker
 --
 
 ALTER TABLE ONLY public.qna_vote
-    ADD CONSTRAINT qna_vote_user_id_7effef33_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+    ADD CONSTRAINT qna_vote_user_id_7effef33_fk_users_haskeruser_id FOREIGN KEY (user_id) REFERENCES public.users_haskeruser(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
--- Name: users_haskeruser users_haskeruser_user_id_700ed95c_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: hasker
+-- Name: users_haskeruser_groups users_haskeruser_gro_haskeruser_id_469cd050_fk_users_has; Type: FK CONSTRAINT; Schema: public; Owner: hasker
 --
 
-ALTER TABLE ONLY public.users_haskeruser
-    ADD CONSTRAINT users_haskeruser_user_id_700ed95c_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE ONLY public.users_haskeruser_groups
+    ADD CONSTRAINT users_haskeruser_gro_haskeruser_id_469cd050_fk_users_has FOREIGN KEY (haskeruser_id) REFERENCES public.users_haskeruser(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: users_haskeruser_groups users_haskeruser_groups_group_id_30235a32_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: hasker
+--
+
+ALTER TABLE ONLY public.users_haskeruser_groups
+    ADD CONSTRAINT users_haskeruser_groups_group_id_30235a32_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES public.auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: users_haskeruser_user_permissions users_haskeruser_use_haskeruser_id_8024d1ad_fk_users_has; Type: FK CONSTRAINT; Schema: public; Owner: hasker
+--
+
+ALTER TABLE ONLY public.users_haskeruser_user_permissions
+    ADD CONSTRAINT users_haskeruser_use_haskeruser_id_8024d1ad_fk_users_has FOREIGN KEY (haskeruser_id) REFERENCES public.users_haskeruser(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: users_haskeruser_user_permissions users_haskeruser_use_permission_id_078f2630_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: hasker
+--
+
+ALTER TABLE ONLY public.users_haskeruser_user_permissions
+    ADD CONSTRAINT users_haskeruser_use_permission_id_078f2630_fk_auth_perm FOREIGN KEY (permission_id) REFERENCES public.auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
