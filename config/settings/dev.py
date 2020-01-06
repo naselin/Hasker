@@ -6,8 +6,6 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 ALLOWED_HOSTS = []
 
-SECRET_KEY = '^2%sixf#^6+(%f(^sm9p9b@er82)!2kh$eb7n-w#a-%qm-%-t2'
-
 # Database
 DATABASES = {
     'default': {
