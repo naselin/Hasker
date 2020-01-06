@@ -48,7 +48,7 @@ $(document).ready(function () {
                 type: 'POST',
                 url: '/mark/' + id + '/',
                 success: function (data, status, xhr) {
-                    window.location.reload();
+                    window.location.reload(true)
                 },
                 error: function (xhr, status, exception) {
                     console.log(xhr, status, exception)
