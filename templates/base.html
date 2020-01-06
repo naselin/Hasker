@@ -20,7 +20,7 @@
       </form>
       {% if user.is_authenticated %}
         <div>
-          <img class="avatar-img" src="{{ MEDIA_URL }}{{ user.hasker_user.avatar }}" width="100", height="100">
+          <img class="avatar-img" src="{{ user.get_avatar_url }}" width="100", height="100">
           <a href="{% url 'settings' %}">{{ user.username | capfirst }}</a>
           <a href="{% url 'logout' %}" class="btn btn-secondary" role="button">Logout</a>
         </div>
