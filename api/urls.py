@@ -7,7 +7,6 @@ from .views import QuestionViewSet, TrendingView, SearchView, TagView,\
 
 router = routers.DefaultRouter()
 router.register(r"questions", QuestionViewSet)
-app_name = "api"
 
 urlpatterns = [
     url(r"^", include(router.urls)),
