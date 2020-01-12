@@ -16,9 +16,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'rest_framework',
 
     'qna',
     'users',
+    'api'
 ]
 
 MIDDLEWARE = [
@@ -96,3 +98,12 @@ LOGIN_REDIRECT_URL = '/'
 
 # Default avatar path
 DEFAULT_AVATAR = MEDIA_URL + "avatars/default.png"
+
+# API
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ),
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+}
